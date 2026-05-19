@@ -4,9 +4,21 @@ import { leadFormFieldsSchema, refineContactRequired } from "./lead-form-shared"
 
 export const leadFormServerSchema = leadFormFieldsSchema
   .extend({
-    name: z.string().min(2).max(120),
-    project_type: z.string().min(1).max(64),
-    budget_range: z.string().min(1).max(64),
+    name: z
+      .string()
+      .min(2)
+      .max(120)
+      .transform((v) => v.trim()),
+    project_type: z
+      .string()
+      .min(1)
+      .max(64)
+      .transform((v) => v.trim()),
+    budget_range: z
+      .string()
+      .min(1)
+      .max(64)
+      .transform((v) => v.trim()),
     consent_accepted: z.literal(true),
   })
   .extend({
@@ -42,26 +54,36 @@ export type NormalizedLeadPayload = {
   utm_term: string | null;
 };
 
+function trimRequired(value: string): string {
+  return value.trim();
+}
+
+function trimToNull(value: string | undefined): string | null {
+  if (value === undefined) return null;
+  const trimmed = value.trim();
+  return trimmed === "" ? null : trimmed;
+}
+
 export function normalizeLeadPayload(input: LeadFormServerInput): NormalizedLeadPayload {
   return {
-    name: input.name,
-    phone: input.phone || null,
-    telegram: input.telegram || null,
-    email: input.email || null,
-    website: input.website || null,
-    project_type: input.project_type,
-    budget_range: input.budget_range,
-    business_context: input.business_context || null,
-    message: input.message || null,
+    name: trimRequired(input.name),
+    phone: trimToNull(input.phone),
+    telegram: trimToNull(input.telegram),
+    email: trimToNull(input.email),
+    website: trimToNull(input.website),
+    project_type: trimRequired(input.project_type),
+    budget_range: trimRequired(input.budget_range),
+    business_context: trimToNull(input.business_context),
+    message: trimToNull(input.message),
     consent_accepted: true,
-    consent_version: input.consent_version,
-    source: input.source || "factory-template",
-    page_path: input.page_path || null,
-    referrer: input.referrer || null,
-    utm_source: input.utm_source || null,
-    utm_medium: input.utm_medium || null,
-    utm_campaign: input.utm_campaign || null,
-    utm_content: input.utm_content || null,
-    utm_term: input.utm_term || null,
+    consent_version: trimRequired(input.consent_version),
+    source: trimToNull(input.source) ?? "factory-template",
+    page_path: trimToNull(input.page_path),
+    referrer: trimToNull(input.referrer),
+    utm_source: trimToNull(input.utm_source),
+    utm_medium: trimToNull(input.utm_medium),
+    utm_campaign: trimToNull(input.utm_campaign),
+    utm_content: trimToNull(input.utm_content),
+    utm_term: trimToNull(input.utm_term),
   };
 }

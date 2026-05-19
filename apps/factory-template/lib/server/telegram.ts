@@ -61,9 +61,15 @@ export function buildOwnerNotificationMessage(payload: NormalizedLeadPayload): s
   return lines.join("\n");
 }
 
+export type TelegramNotificationResult = {
+  sent: boolean;
+  skipped: boolean;
+  error?: string;
+};
+
 export async function sendOwnerTelegramNotification(
   payload: NormalizedLeadPayload,
-): Promise<{ sent: boolean; skipped: boolean; error?: string }> {
+): Promise<TelegramNotificationResult> {
   const config = getTelegramConfig();
   if (!config) {
     return { sent: false, skipped: true };

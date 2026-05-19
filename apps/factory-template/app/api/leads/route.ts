@@ -11,7 +11,10 @@ import {
   createSiteLead,
   updateLeadNotificationStatus,
 } from "@/lib/server/leads";
-import { sendOwnerTelegramNotification } from "@/lib/server/telegram";
+import {
+  sendOwnerTelegramNotification,
+  type TelegramNotificationResult,
+} from "@/lib/server/telegram";
 import {
   leadFormServerSchema,
   normalizeLeadPayload,
@@ -34,6 +37,100 @@ function validationErrorResponse(error: ZodError) {
     { ok: false, error: "validation_error", fields },
     { status: 400 },
   );
+}
+
+type NotificationOutcome = {
+  leadStatus: LeadStatus;
+  notification: LeadSubmitSuccessResponse["notification"];
+};
+
+function resolveNotificationOutcome(
+  telegramResult: TelegramNotificationResult,
+): NotificationOutcome {
+  if (telegramResult.skipped) {
+    return {
+      leadStatus: OWNER_NOTIFICATION_STATUSES.NEW,
+      notification: { sent: false, skipped: true },
+    };
+  }
+
+  if (telegramResult.sent) {
+    return {
+      leadStatus: OWNER_NOTIFICATION_STATUSES.NOTIFIED,
+      notification: { sent: true },
+    };
+  }
+
+  return {
+    leadStatus: OWNER_NOTIFICATION_STATUSES.FAILED,
+    notification: { sent: false, error: telegramResult.error },
+  };
+}
+
+async function persistNotificationBookkeeping(
+  leadId: string,
+  telegramResult: TelegramNotificationResult,
+): Promise<void> {
+  if (telegramResult.skipped) {
+    await createNotificationLog(leadId, "telegram", "skipped", undefined, {
+      reason: "not_configured",
+    });
+    await createLeadEvent(leadId, "owner_notification_skipped", {});
+    return;
+  }
+
+  if (telegramResult.sent) {
+    await updateLeadNotificationStatus(leadId, OWNER_NOTIFICATION_STATUSES.NOTIFIED);
+    await createNotificationLog(leadId, "telegram", "sent");
+    await createLeadEvent(leadId, "owner_notification_sent", {});
+    return;
+  }
+
+  await updateLeadNotificationStatus(
+    leadId,
+    OWNER_NOTIFICATION_STATUSES.FAILED,
+    telegramResult.error,
+  );
+  await createNotificationLog(leadId, "telegram", "failed", telegramResult.error);
+  await createLeadEvent(leadId, "owner_notification_failed", {
+    error: telegramResult.error ?? "unknown",
+  });
+}
+
+async function bestEffortLeadStatusUpdate(
+  leadId: string,
+  status: LeadStatus,
+  error?: string,
+): Promise<void> {
+  try {
+    await updateLeadNotificationStatus(leadId, status, error);
+  } catch {
+    // Lead already saved; status update is best-effort only.
+  }
+}
+
+async function recordNotificationBookkeeping(
+  leadId: string,
+  telegramResult: TelegramNotificationResult,
+): Promise<NotificationOutcome> {
+  const outcome = resolveNotificationOutcome(telegramResult);
+
+  try {
+    await persistNotificationBookkeeping(leadId, telegramResult);
+    return outcome;
+  } catch {
+    console.error("[api/leads] notification_bookkeeping_failed", { leadId });
+
+    if (!telegramResult.skipped) {
+      await bestEffortLeadStatusUpdate(
+        leadId,
+        outcome.leadStatus,
+        telegramResult.sent ? undefined : telegramResult.error,
+      );
+    }
+
+    return outcome;
+  }
 }
 
 export async function POST(request: Request) {
@@ -94,35 +191,10 @@ export async function POST(request: Request) {
   }
 
   const telegramResult = await sendOwnerTelegramNotification(payload);
-
-  let leadStatus: LeadStatus = OWNER_NOTIFICATION_STATUSES.NEW;
-  let notification: LeadSubmitSuccessResponse["notification"];
-
-  if (telegramResult.skipped) {
-    await createNotificationLog(leadId, "telegram", "skipped", undefined, {
-      reason: "not_configured",
-    });
-    await createLeadEvent(leadId, "owner_notification_skipped", {});
-    notification = { sent: false, skipped: true };
-  } else if (telegramResult.sent) {
-    leadStatus = OWNER_NOTIFICATION_STATUSES.NOTIFIED;
-    await updateLeadNotificationStatus(leadId, OWNER_NOTIFICATION_STATUSES.NOTIFIED);
-    await createNotificationLog(leadId, "telegram", "sent");
-    await createLeadEvent(leadId, "owner_notification_sent", {});
-    notification = { sent: true };
-  } else {
-    leadStatus = OWNER_NOTIFICATION_STATUSES.FAILED;
-    await updateLeadNotificationStatus(
-      leadId,
-      OWNER_NOTIFICATION_STATUSES.FAILED,
-      telegramResult.error,
-    );
-    await createNotificationLog(leadId, "telegram", "failed", telegramResult.error);
-    await createLeadEvent(leadId, "owner_notification_failed", {
-      error: telegramResult.error ?? "unknown",
-    });
-    notification = { sent: false, error: telegramResult.error };
-  }
+  const { leadStatus, notification } = await recordNotificationBookkeeping(
+    leadId,
+    telegramResult,
+  );
 
   const response: LeadSubmitSuccessResponse = {
     ok: true,

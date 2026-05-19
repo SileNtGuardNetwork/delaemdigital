@@ -1,4 +1,4 @@
-# Cursor rules 10 - Next.js и качество кода
+﻿# Cursor rules 10 - Next.js и качество кода
 
 ## Роль
 
@@ -120,3 +120,4 @@ npm run typecheck
 - нет лишних client components;
 - build/typecheck пройдены или blocker зафиксирован;
 - изменения соответствуют стандартам репозитория.
+

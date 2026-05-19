@@ -1,4 +1,4 @@
-# Cursor rules 30 - Лиды, аналитика, legal
+﻿# Cursor rules 30 - Лиды, аналитика, legal
 
 ## Роль
 
@@ -141,3 +141,4 @@ Footer должен содержать legal links.
 - legal links есть;
 - UTM сохраняются;
 - success/failure states понятны.
+

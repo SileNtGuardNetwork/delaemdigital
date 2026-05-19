@@ -1,0 +1,41 @@
+:root {
+  --color-bg-base: #08090c;
+  --color-bg-elevated: #101218;
+  --color-bg-panel: rgba(16, 18, 24, 0.78);
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-border-accent: rgba(184, 115, 51, 0.35);
+
+  --color-text-primary: #f4f6f8;
+  --color-text-secondary: #b4bcc9;
+  --color-text-muted: #8a94a6;
+
+  --color-accent-copper: #b87333;
+  --color-accent-copper-hover: #c98442;
+  --color-accent-steel: #5b7c9d;
+  --color-success: #4a9d7a;
+  --color-danger: #c45c5c;
+
+  --font-onest: "Onest", system-ui, sans-serif;
+  --font-manrope: "Manrope", system-ui, sans-serif;
+
+  --text-h1: clamp(2rem, 4vw, 3.25rem);
+  --text-h2: clamp(1.75rem, 3vw, 2.5rem);
+  --text-h3: clamp(1.25rem, 2vw, 1.75rem);
+  --text-body: 1.0625rem;
+  --text-small: 0.875rem;
+
+  --space-section-y-lg: clamp(5rem, 8vw, 8.75rem);
+  --space-section-y-md: clamp(4.5rem, 6vw, 6rem);
+  --space-container-x: clamp(1.25rem, 4vw, 4rem);
+  --space-stack-lg: 2.5rem;
+  --space-stack-md: 1.5rem;
+
+  --container-max: 1320px;
+  --radius-button: 12px;
+  --radius-card: 16px;
+  --shadow-panel: 0 24px 80px rgba(0, 0, 0, 0.35);
+  --glow-copper-soft: 0 0 40px rgba(184, 115, 51, 0.12);
+
+  --motion-duration: 0.45s;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}

@@ -1,0 +1,49 @@
+.surface-panel {
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-card);
+  backdrop-filter: blur(12px);
+}
+
+.surface-panel-accent {
+  border-color: var(--color-border-accent);
+  box-shadow: var(--glow-copper-soft);
+}
+
+.text-gradient-copper {
+  background: linear-gradient(135deg, #e8c4a0 0%, var(--color-accent-copper) 55%, #8f5a2b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.prose-legal {
+  color: var(--color-text-secondary);
+}
+
+.prose-legal h2 {
+  font-family: var(--font-manrope);
+  color: var(--color-text-primary);
+  font-size: var(--text-h3);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-legal p,
+.prose-legal li {
+  margin-bottom: 0.75rem;
+}
+
+.prose-legal ul {
+  padding-left: 1.25rem;
+}
+
+.reveal {
+  animation: fade-up var(--motion-duration) var(--motion-ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}

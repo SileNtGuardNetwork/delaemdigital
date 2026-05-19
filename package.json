@@ -1,0 +1,17 @@
+{
+  "name": "delaemdigital",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=factory-template",
+    "build": "npm run build --workspace=factory-template",
+    "typecheck": "npm run typecheck --workspace=factory-template",
+    "lint": "npm run lint --workspace=factory-template"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

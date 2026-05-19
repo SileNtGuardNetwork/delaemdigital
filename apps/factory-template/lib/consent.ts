@@ -1,5 +1,8 @@
 export const CONSENT_VERSION = "2026-05-01";
 
+export const PRIVACY_URL = "/privacy";
+export const CONSENT_URL = "/consent";
+
 export const COOKIE_CONSENT_KEY = "dd_cookie_consent";
 export const COOKIE_CONSENT_VERSION_KEY = "dd_cookie_consent_version";
 

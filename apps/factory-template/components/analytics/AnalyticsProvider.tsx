@@ -2,10 +2,12 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 
-import { trackEvent, type AnalyticsEventName, type AnalyticsPayload } from "./track-event";
+import { trackEvent } from "./track-event";
+import type { SafeAnalyticsPayload } from "@/lib/analytics/events";
+import type { AnalyticsEventName } from "@/lib/analytics/events";
 
 type AnalyticsContextValue = {
-  track: (name: AnalyticsEventName, payload?: AnalyticsPayload) => void;
+  track: (name: AnalyticsEventName, payload?: SafeAnalyticsPayload) => void;
 };
 
 const AnalyticsContext = createContext<AnalyticsContextValue>({

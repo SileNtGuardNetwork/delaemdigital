@@ -21,6 +21,7 @@ export function CookieConsent() {
   const applyChoice = (value: CookieConsentValue) => {
     setStoredCookieConsent(value);
     setVisible(false);
+    window.dispatchEvent(new Event("dd-cookie-consent-change"));
     trackEvent(
       value === "accepted" ? "cookie_consent_accepted" : "cookie_consent_rejected",
       { section: "cookie_banner" },

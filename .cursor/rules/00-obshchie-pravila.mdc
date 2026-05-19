@@ -1,0 +1,93 @@
+# Cursor rules 00 - Общие правила
+
+## Роль
+
+Cursor Pro+ — инженерная среда реализации фабрики сайтов Делаем Диджитал.
+
+Cursor реализует утверждённые решения. Cursor не принимает продуктовую стратегию самостоятельно.
+
+## Главная цель
+
+Создавать premium ClientFlow-сайты с ИИ-автоворонками, лид-магнитами, Telegram-ботами, аналитикой, SEO и готовностью к трафику.
+
+## Порядок работы
+
+Правильный порядок:
+
+1. Диагностика.
+2. Оффер.
+3. Конверсионный прототип.
+4. Документ текстов.
+5. Дизайн.
+6. Код.
+7. Интеграции.
+8. Контроль качества.
+9. Запуск.
+10. Кейс.
+
+Cursor не начинает реализацию сайта без утверждённого прототипа или задачи от GPT Business.
+
+## Source of truth
+
+Перед крупными правками читать:
+
+- AGENTS.md
+- docs/18-tehnicheskoe-arhitekturnoe-reshenie.md
+- docs/22-standart-konversionnogo-prototipa.md
+- docs/23-dizayn-sistema-premium-saytov.md
+- docs/24-standart-motion-i-premialnyh-effektov.md
+- docs/25-seo-sistema-pod-klyuch.md
+- docs/26-standart-ii-avtovoronki.md
+- docs/27-standart-gotovnosti-k-trafiku.md
+- docs/28-standart-bystrodeystviya-i-komforta.md
+- docs/29-slovar-i-neyming-fabriki.md
+- docs/30-usilenie-ai-steka.md
+
+## Запрещено
+
+Нельзя:
+
+- менять оффер без явной задачи;
+- менять структуру сайта самовольно;
+- делать generic landing page;
+- добавлять fake dashboards;
+- использовать raster text;
+- заменять premium-дизайн случайными blocks;
+- делать форму без consent;
+- отправлять персональные данные в аналитику;
+- удалять стандарты;
+- запускать production deploy без команды;
+- считать задачу готовой без отчёта.
+
+## Язык
+
+Пользовательский текст — на русском.
+
+Допустимые термины:
+
+- ClientFlow
+- ClientFlow System
+- Digital
+- Next.js
+- Supabase
+- Vercel
+- GitHub
+- PostHog
+- Telegram
+- SEO
+- UTM
+- API
+- CRM
+- QA
+
+## Отчёт после работы
+
+Каждый ответ Cursor после реализации должен содержать:
+
+- что изменено;
+- какие файлы изменены;
+- что проверено;
+- результат build;
+- результат typecheck;
+- риски;
+- следующий шаг.

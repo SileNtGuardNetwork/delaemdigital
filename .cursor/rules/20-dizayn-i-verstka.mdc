@@ -1,0 +1,129 @@
+# Cursor rules 20 - Дизайн и верстка
+
+## Роль
+
+Эти правила применяются ко всем задачам дизайна, верстки, адаптива, motion и визуальных эффектов.
+
+## Главная цель
+
+Каждый сайт должен выглядеть современно, дорого, технологично и удобно.
+
+Premium-дизайн — это:
+
+- ясный первый экран;
+- сильная визуальная иерархия;
+- тёмная premium-система;
+- аккуратный motion;
+- удобный mobile;
+- понятные CTA;
+- высокая скорость;
+- отсутствие визуального шума.
+
+## Обязательные документы
+
+Перед задачами по дизайну читать:
+
+- docs/23-dizayn-sistema-premium-saytov.md
+- docs/24-standart-motion-i-premialnyh-effektov.md
+- docs/28-standart-bystrodeystviya-i-komforta.md
+
+## Визуальный стиль
+
+Использовать:
+
+- graphite / obsidian surfaces;
+- copper action accents;
+- steel-blue system accents;
+- soft glow;
+- thin borders;
+- clean typography;
+- calm spacing;
+- premium dark minimalism.
+
+Нельзя:
+
+- generic SaaS landing;
+- neon/cyberpunk overload;
+- fake dashboards;
+- random floating cards;
+- stock people;
+- raster text;
+- слишком много glow/blur;
+- одинаковые карточные сетки весь сайт;
+- мелкий серый текст на тёмном фоне.
+
+## Первый экран
+
+Hero должен:
+
+- объяснять оффер за 3-5 секунд;
+- показывать CTA рано;
+- иметь мягкий вход в лид-магнит или ИИ-автоворонку;
+- сохранять смысл на mobile;
+- не прятать текст за визуалом.
+
+## Mobile-first
+
+Проверять ширины:
+
+- 360px;
+- 390px;
+- 430px;
+- 768px;
+- 1024px;
+- 1440px.
+
+Нельзя допускать:
+
+- horizontal overflow;
+- обрезанные CTA;
+- нечитаемые заголовки;
+- слишком длинные карточные простыни;
+- форму, которой неудобно пользоваться;
+- cookie banner, который блокирует главное действие.
+
+## Motion
+
+Разрешено:
+
+- fade-up;
+- hover 1-3px;
+- soft glow transition;
+- route-line animation;
+- form feedback;
+- loading/success/failure states.
+
+Запрещено:
+
+- scroll hijacking;
+- heavy parallax;
+- агрессивные loop-анимации;
+- анимации, которые задерживают оффер или CTA;
+- motion без prefers-reduced-motion.
+
+## Компоненты
+
+Секции должны иметь задачу.
+
+Не создавать секцию ради красоты.
+
+Каждая секция должна поддерживать:
+
+- id;
+- смысл;
+- CTA или переход;
+- mobile behavior;
+- analytics event if applicable.
+
+## Критерий готовности
+
+Верстка готова только если:
+
+- первый экран понятен;
+- CTA виден;
+- mobile проверен;
+- нет horizontal overflow;
+- формы удобны;
+- motion не мешает;
+- дизайн не выглядит шаблонно;
+- сайт ощущается premium.

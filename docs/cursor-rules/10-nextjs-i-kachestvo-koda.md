@@ -1,0 +1,122 @@
+# Cursor rules 10 - Next.js и качество кода
+
+## Роль
+
+Эти правила применяются ко всем задачам Next.js, TypeScript, структуры проекта и качества кода.
+
+## Базовый стек
+
+Использовать:
+
+- Next.js App Router;
+- TypeScript strict;
+- Tailwind;
+- server components по умолчанию;
+- client components только там, где нужна интерактивность;
+- Zod для валидации;
+- Supabase только через server-side слой для чувствительных операций.
+
+## Структура
+
+Ориентир для приложения:
+
+```text
+apps/factory-template/app
+apps/factory-template/components
+apps/factory-template/styles
+apps/factory-template/lib
+packages/ui
+packages/forms
+packages/analytics
+packages/telegram
+packages/config
+packages/legal
+```
+
+Если monorepo ещё не создан, не усложнять без задачи. Но границы пакетов учитывать заранее.
+
+## Правила компонентов
+
+Компонент должен быть:
+
+- типизирован;
+- читаем;
+- без лишней логики;
+- без смешения бизнес-текста и инфраструктуры;
+- mobile-safe;
+- готов к analytics hooks, если это CTA или секция.
+
+## Server / Client split
+
+По умолчанию использовать server components.
+
+Client component нужен только для:
+
+- формы;
+- интерактивного выбора;
+- анимации;
+- cookie consent;
+- analytics listener;
+- UI state.
+
+Не добавлять `use client` без необходимости.
+
+## Env и секреты
+
+Нельзя:
+
+- коммитить env-файлы;
+- логировать secrets;
+- использовать service role на клиенте;
+- использовать Telegram token на клиенте;
+- добавлять секреты в public config.
+
+Нужно:
+
+- создать `.env.example`;
+- проверять env через `env.ts`;
+- разделять public и server variables.
+
+## Проверки
+
+После реализации запускать, если проект уже инициализирован:
+
+```bash
+npm run build
+npm run typecheck
+```
+
+Если команд нет, честно указать, что проверки не запускались и почему.
+
+## Ошибки
+
+Не скрывать ошибки.
+
+Если build падает:
+
+- показать причину;
+- исправить;
+- повторить проверку;
+- если не удалось — зафиксировать blocker.
+
+## Запрещено
+
+Нельзя:
+
+- добавлять тяжёлые зависимости без причины;
+- использовать устаревшие Next.js-паттерны;
+- делать critical content client-only без необходимости;
+- ломать SEO metadata;
+- оставлять console.log в production flow;
+- создавать fake data как будто это реальные метрики;
+- удалять типы ради скорости.
+
+## Критерий готовности
+
+Задача готова только если:
+
+- код типизирован;
+- нет очевидного dead code;
+- нет лишних client components;
+- build/typecheck пройдены или blocker зафиксирован;
+- изменения соответствуют стандартам репозитория.

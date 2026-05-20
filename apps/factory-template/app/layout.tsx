@@ -3,6 +3,8 @@ import { Manrope, Onest } from "next/font/google";
 
 import { AnalyticsClickListener } from "@/components/analytics/AnalyticsClickListener";
 import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
+import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
+import { UtmCapture } from "@/components/analytics/UtmCapture";
 import { CookieConsent } from "@/components/legal/CookieConsent";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { LegalFooter } from "@/components/legal/LegalFooter";
@@ -59,6 +61,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru" className={`${onest.variable} ${manrope.variable}`}>
       <body className="font-sans antialiased">
         <AnalyticsProvider>
+          <UtmCapture />
+          <AnalyticsScripts />
           <AnalyticsClickListener>
             <SiteHeader />
             <main>{children}</main>

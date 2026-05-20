@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { ZodError } from "zod";
 
 import { trackEvent } from "@/components/analytics/track-event";
+import { LeadSubmitError, submitLead } from "@/lib/api/submit-lead";
 import { CONSENT_VERSION } from "@/lib/consent";
-import { captureUtmFromWindow } from "@/lib/utm";
+import { env } from "@/lib/env";
+import { getUtmForSubmit } from "@/lib/utm-storage";
 import {
   budgetRangeOptions,
-  leadFormSchema,
+  leadFormClientSchema,
   projectTypeOptions,
 } from "@/lib/validation";
 
@@ -31,21 +33,25 @@ const initialValues = {
   message: "",
 };
 
+const isMockSubmitEnabled = () => env.NEXT_PUBLIC_LEAD_FORM_MOCK === true;
+
 export function LeadForm() {
   const [values, setValues] = useState(initialValues);
+  const [honeypot, setHoneypot] = useState("");
   const [consent, setConsent] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<LeadFormStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    trackEvent("lead_form_viewed", { section: "contact" });
+    trackEvent("lead_form_viewed", { section: "contact", path: "/#contact" });
   }, []);
 
   const handleStart = () => {
     if (!started) {
       setStarted(true);
-      trackEvent("lead_form_started", { section: "contact" });
+      trackEvent("lead_form_started", { section: "contact", path: "/#contact" });
     }
   };
 
@@ -59,40 +65,84 @@ export function LeadForm() {
     });
   };
 
-  const shouldMockFail = () => {
-    if (typeof window === "undefined") return false;
-    return new URLSearchParams(window.location.search).get("form_mock_failure") === "1";
+  const runMockSubmit = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    if (new URLSearchParams(window.location.search).get("form_mock_failure") === "1") {
+      throw new Error("mock_failure");
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setErrors({});
-    trackEvent("lead_form_submit_attempt", { section: "contact" });
+    setErrorMessage(undefined);
+    trackEvent("lead_form_submit_attempt", {
+      section: "contact",
+      path: "/#contact",
+      project_type: values.project_type || undefined,
+      budget_range: values.budget_range || undefined,
+    });
 
-    const utm = captureUtmFromWindow();
+    const utm = getUtmForSubmit();
 
     try {
-      const payload = leadFormSchema.parse({
+      const payload = leadFormClientSchema.parse({
         ...values,
         email: values.email || undefined,
         website: values.website || undefined,
         consent_accepted: consent ? true : undefined,
         consent_version: CONSENT_VERSION,
-        source: "factory-template",
+        _honeypot: honeypot,
         ...utm,
       });
 
       setStatus("loading");
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      if (shouldMockFail()) {
-        throw new Error("mock_failure");
+      if (isMockSubmitEnabled()) {
+        await runMockSubmit();
+        setStatus("success");
+        trackEvent("lead_form_submitted", {
+          section: "contact",
+          path: "/#contact",
+          project_type: payload.project_type,
+          budget_range: payload.budget_range,
+          notification_status: "skipped",
+        });
+        return;
       }
 
-      void payload;
+      const result = await submitLead(payload);
+      if (!result.ok) {
+        throw new LeadSubmitError("submit_failed", "submit_failed");
+      }
+
+      const notificationStatus = result.notification.sent
+        ? "sent"
+        : result.notification.skipped
+          ? "skipped"
+          : "failed";
+
+      trackEvent("lead_form_submitted", {
+        section: "contact",
+        path: "/#contact",
+        project_type: payload.project_type,
+        budget_range: payload.budget_range,
+        notification_status: notificationStatus,
+      });
+
+      if (notificationStatus === "sent") {
+        trackEvent("owner_notification_sent", {
+          section: "contact",
+          notification_status: "sent",
+        });
+      } else if (notificationStatus === "failed") {
+        trackEvent("owner_notification_failed", {
+          section: "contact",
+          notification_status: "failed",
+        });
+      }
+
       setStatus("success");
-      trackEvent("lead_form_submitted", { section: "contact" });
     } catch (error) {
       if (error instanceof ZodError) {
         const fieldErrors: FieldErrors = {};
@@ -111,17 +161,47 @@ export function LeadForm() {
         return;
       }
 
+      if (error instanceof LeadSubmitError) {
+        if (error.code === "lead_storage_not_configured") {
+          setErrorMessage(
+            "Сохранение заявок пока не настроено. Добавьте Supabase в .env.local и примените migration.",
+          );
+        } else if (error.fields) {
+          setErrors(error.fields);
+          setStatus("idle");
+          return;
+        } else if (error.code === "spam_detected") {
+          setErrorMessage("Не удалось отправить заявку. Попробуйте ещё раз.");
+        } else {
+          setErrorMessage("Не удалось отправить заявку. Проверьте данные и попробуйте снова.");
+        }
+      } else {
+        setErrorMessage("Не удалось отправить заявку. Проверьте соединение и попробуйте снова.");
+      }
+
       setStatus("error");
-      trackEvent("lead_form_failed", { section: "contact" });
+      trackEvent("lead_form_failed", {
+        section: "contact",
+        path: "/#contact",
+        project_type: values.project_type || undefined,
+        budget_range: values.budget_range || undefined,
+      });
     }
   };
 
   const handleRetry = () => {
     setStatus("idle");
+    setErrorMessage(undefined);
   };
 
   if (status === "success" || status === "error") {
-    return <FormStatus status={status} onRetry={status === "error" ? handleRetry : undefined} />;
+    return (
+      <FormStatus
+        status={status}
+        message={errorMessage}
+        onRetry={status === "error" ? handleRetry : undefined}
+      />
+    );
   }
 
   return (
@@ -131,6 +211,17 @@ export function LeadForm() {
       noValidate
       aria-busy={status === "loading"}
     >
+      <input
+        type="text"
+        name="_honeypot"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        className="absolute -left-[9999px] h-px w-px overflow-hidden opacity-0"
+        aria-hidden
+      />
+
       <div className="grid gap-6 md:grid-cols-2">
         <FormField id="name" label="Имя *" error={errors.name}>
           <input
@@ -142,7 +233,6 @@ export function LeadForm() {
             className={formControlClassName(Boolean(errors.name))}
             disabled={status === "loading"}
             aria-invalid={Boolean(errors.name)}
-            aria-describedby={errors.name ? "name-error" : undefined}
           />
         </FormField>
 
@@ -277,8 +367,8 @@ export function LeadForm() {
       </button>
 
       <p className="text-xs text-text-muted">
-        Нажимая кнопку, вы подтверждаете согласие на обработку данных. UTM и источник фиксируются
-        при подключении v0.2.
+        Нажимая кнопку, вы подтверждаете согласие на обработку данных. UTM и источник сохраняются
+        вместе с заявкой.
       </p>
     </form>
   );

@@ -40,7 +40,6 @@ Use these defaults unless a specific document says otherwise:
 - TypeScript strict
 - Tailwind CSS
 - shadcn/ui
-- Framer Motion only when justified
 - Supabase for data/storage/auth when needed
 - Telegram Bot API for owner notifications
 - PostHog for product analytics
@@ -48,6 +47,29 @@ Use these defaults unless a specific document says otherwise:
 - Better Stack for monitoring
 - Vercel for own products
 - Timeweb Cloud for Russian client personal-data infrastructure when required
+- n8n for approved automation workflows
+- GSAP for approved premium motion patterns when animation is justified
+
+## Stack Source of Truth
+
+Current stack decisions and standards live in:
+
+- `docs/stack/STACK_DECISION_MATRIX_v1.md`
+- `docs/standards/DD_N8N_WORKFLOW_STANDARD_v1.md`
+- `docs/standards/DD_MOTION_STANDARD_v1.md`
+- `docs/standards/DD_MEMORY_LAYER_STANDARD_v1.md`
+- `docs/standards/API_SOURCING_GATE_v1.md`
+- `docs/labs/SILENT_EMERGENCY_TRANSPORT_LAB_GATE_v1.md`
+
+Current stack decisions:
+
+- `n8n`: `ADOPT` as DD Automation Layer.
+- `greensock/gsap-skills`: `ADOPT` as Website Factory Motion Layer.
+- `mem0ai/mem0`: `SPIKE` as candidate AI Memory Layer.
+- `cporter202/API-mega-list`: `RESEARCH SOURCE` only.
+- `masterking32/MasterDnsVPN`: `LAB ONLY`, not DD/SileNt production.
+
+Do not upgrade a `SPIKE`, `RESEARCH SOURCE` or `LAB ONLY` item into production without updating the stack decision matrix and adding evidence.
 
 ## Agent Source of Truth
 
@@ -167,6 +189,10 @@ If a Next.js app is not yet initialized, do not claim build/typecheck were run.
 - Do not add dependencies without explicit approval.
 - Do not run migrations without explicit approval.
 - Do not perform autonomous production deploys.
+- Do not use n8n as source of truth for payments, access rights or key issuance.
+- Do not store sensitive client/user memory in Mem0 before the memory spike passes.
+- Do not use API-mega-list tools for scraping, spam or unauthorized personal-data extraction.
+- Do not connect MasterDnsVPN or DNS tunnel research to production DD/SileNt systems.
 
 Destructive commands are forbidden unless explicitly approved:
 
@@ -206,6 +232,8 @@ Default Delaem Digital visual language:
 - real HTML text;
 - high-ticket B2B authority;
 - no visual noise.
+
+Motion must follow `docs/standards/DD_MOTION_STANDARD_v1.md`.
 
 ## Quality Standard
 

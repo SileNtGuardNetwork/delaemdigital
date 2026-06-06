@@ -1,7 +1,7 @@
 # Stack Decision Matrix v1 — Delaem Digital
 
 Status: source of truth for current technology decisions.
-Last updated: 2026-06-05.
+Last updated: 2026-06-06.
 
 This document records stack decisions for Delaem Digital / ClientFlow Factory. It separates production stack, spike candidates, research-only sources, and lab-only experiments.
 
@@ -21,6 +21,7 @@ This document records stack decisions for Delaem Digital / ClientFlow Factory. I
 |---|---|---|---|---|
 | `n8n-io/n8n` | `ADOPT` | DD Automation Layer | Self-host license cost starts at 0, but VPS/DB/backups/support cost money. Cloud/Enterprise paid. | Use for ClientFlow automation, lead routing, Telegram owner cards, reports, CRM/n8n workflows. Do not use as payment/access source of truth. |
 | `greensock/gsap-skills` | `ADOPT` | Website Factory Motion Layer | 0 license cost. Implementation time only. | Official GSAP skills for Codex/Cursor/Claude. Use for safe premium animation patterns in Next.js. |
+| `nexu-io/open-design` | `SPIKE` | Visual Prototype Lab | Local/self-host/BYOK starts at 0. Do not use paid cloud/model router without separate decision. | Use to generate hero, ClientFlow Map, deck and section concepts from DD DESIGN.md. Not a production builder. |
 | `mem0ai/mem0` | `SPIKE` | AI Memory Layer | OSS/self-host starts at 0, but LLM/embedding/storage/VPS cost money. Cloud paid after limits. | Test for DD AI Engineering OS, lead qualifier memory, support memory. Requires PII/deletion/cross-user leakage gates. |
 | `cporter202/API-mega-list` | `RESEARCH SOURCE` | API Sourcing / Market Research | Repo is free. Listed APIs/Apify actors may be paid and legally risky. | Use only as raw discovery input. Every candidate must pass API Sourcing Gate. |
 | `masterking32/MasterDnsVPN` | `LAB ONLY` | SileNt Emergency Transport Research, outside DD production | Code is MIT/free. VPS/domain/test infra cost money. | DNS tunnel research only. Do not integrate into DD production or SileNt production without separate gate. |
@@ -93,6 +94,43 @@ docs/standards/DD_MOTION_STANDARD_v1.md
 
 ## Spike candidates
 
+### Open Design
+
+Candidate role after successful spike:
+
+```text
+Visual Prototype Lab
+```
+
+Candidate use cases:
+
+- 3 hero concepts for Delaem Digital;
+- ClientFlow Map section concept;
+- Zapadny Metr architectural premium visual concepts;
+- SileNt secure product landing concepts;
+- case one-pagers and proposal decks.
+
+Hard boundaries:
+
+- not final production builder;
+- no paid cloud/model router without separate decision;
+- local/self-host/BYOK only during spike;
+- no sensitive client data in prompts;
+- no direct copy of generated artifact;
+- output must pass DD Visual QA before implementation.
+
+Required gate before production-level use:
+
+```text
+docs/standards/DD_OPEN_DESIGN_SPIKE_v1.md
+```
+
+Required design system:
+
+```text
+docs/design/open-design/delaem-digital/DESIGN.md
+```
+
 ### Mem0
 
 Approved role after successful spike:
@@ -160,8 +198,9 @@ docs/labs/SILENT_EMERGENCY_TRANSPORT_LAB_GATE_v1.md
 
 ## Current adoption priority
 
-1. `n8n` — implement DD Automation Layer standard and first ClientFlow workflow.
-2. `gsap-skills` — install skills and define DD Motion Standard.
-3. `mem0` — run controlled memory spike.
-4. `API-mega-list` — use only for candidate sourcing.
-5. `MasterDnsVPN` — keep outside production as lab-only research.
+1. `Open Design` — run local visual prototype spike for DD hero + ClientFlow Map.
+2. `gsap-skills` — install skills and apply DD Motion Standard to the selected winner.
+3. `n8n` — implement DD Automation Layer standard and first ClientFlow workflow after flagship visual layer is acceptable.
+4. `mem0` — run controlled memory spike after lead flow basics exist.
+5. `API-mega-list` — use only for candidate sourcing.
+6. `MasterDnsVPN` — keep outside production as lab-only research.

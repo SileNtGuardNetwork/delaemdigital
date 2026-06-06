@@ -11,7 +11,7 @@ This is not a generic agency template. This repository exists to build premium C
 ## Core Formula
 
 ```text
-Discovery -> Blueprint -> Copy -> Design -> Next.js -> Integrations -> Analytics -> QA Gate -> Launch -> Case
+Discovery -> Blueprint -> Copy -> Design -> References -> Next.js -> Motion -> Integrations -> Analytics -> QA Gate -> Launch -> Case
 ```
 
 ## Primary Product
@@ -23,6 +23,7 @@ A Delaem Site is not just a visual website. It must include:
 - offer architecture;
 - conversion-first site blueprint;
 - production copy;
+- reference pack;
 - premium restrained UI;
 - adaptive layout;
 - validated lead form;
@@ -55,6 +56,10 @@ Use these defaults unless a specific document says otherwise:
 Current stack decisions and standards live in:
 
 - `docs/stack/STACK_DECISION_MATRIX_v1.md`
+- `docs/design/DD_VISUAL_SYSTEM_v1.md`
+- `docs/design/DD_VISUAL_REFERENCE_STACK_v1.md`
+- `docs/design/DD_VISUAL_QA_GATE_v1.md`
+- `docs/standards/DD_OPEN_DESIGN_SPIKE_v1.md`
 - `docs/standards/DD_N8N_WORKFLOW_STANDARD_v1.md`
 - `docs/standards/DD_MOTION_STANDARD_v1.md`
 - `docs/standards/DD_MEMORY_LAYER_STANDARD_v1.md`
@@ -65,11 +70,31 @@ Current stack decisions:
 
 - `n8n`: `ADOPT` as DD Automation Layer.
 - `greensock/gsap-skills`: `ADOPT` as Website Factory Motion Layer.
+- `nexu-io/open-design`: `SPIKE` as local/self-host Visual Prototype Lab.
 - `mem0ai/mem0`: `SPIKE` as candidate AI Memory Layer.
 - `cporter202/API-mega-list`: `RESEARCH SOURCE` only.
 - `masterking32/MasterDnsVPN`: `LAB ONLY`, not DD/SileNt production.
 
 Do not upgrade a `SPIKE`, `RESEARCH SOURCE` or `LAB ONLY` item into production without updating the stack decision matrix and adding evidence.
+
+## Visual Reference Source of Truth
+
+Use `docs/design/DD_VISUAL_REFERENCE_STACK_v1.md` before serious visual work.
+
+Approved reference sources include:
+
+- curated.design for general premium web design;
+- landing.love for landing structure;
+- saaspo.com for SaaS/product website patterns;
+- navbar.gallery for navigation;
+- cta.gallery for CTA sections;
+- appmotion.design for animation references;
+- mobbin.com for mobile UX;
+- rebrand.gallery for brand systems;
+- hugeicons.com for icon research;
+- component.gallery for component patterns.
+
+Reference sources are not production dependencies and must not be copied directly. Extract patterns, then adapt through DD Visual System and Visual QA Gate.
 
 ## Agent Source of Truth
 
@@ -86,6 +111,7 @@ Recommended roles:
 - `dd-senior-digital-architect`
 - `dd-clientflow-strategist`
 - `dd-website-factory-architect`
+- `dd-design-quality-director`
 - `dd-frontend-product-ui-engineer`
 - `dd-backend-ai-integrations-engineer`
 - `dd-telegram-bot-architect`
@@ -124,7 +150,8 @@ Before editing code, establish the current state using the smallest useful check
 - current lead form behavior;
 - current Telegram/CRM notification behavior;
 - current analytics event behavior;
-- current docs/spec requirements.
+- current docs/spec requirements;
+- current visual/reference requirements when the task touches UI.
 
 If a baseline cannot be established, say so explicitly and continue with the safest narrow change.
 
@@ -146,18 +173,20 @@ Discard or revise when:
 - the target behavior is not verified;
 - the change broadens scope;
 - the change weakens consent, legal, analytics, monitoring or owner notification;
-- the change adds visual noise or generic SaaS design.
+- the change adds visual noise or generic SaaS design;
+- reference-inspired work copies a site instead of adapting patterns.
 
 ## Work Rules
 
 Before implementation:
 
 1. Read relevant docs in `/docs`.
-2. Identify the current stage: discovery, blueprint, copy, design, build, integration, QA, launch, or case.
+2. Identify the current stage: discovery, blueprint, copy, design, references, build, integration, QA, launch, or case.
 3. Do not skip gates.
 4. Do not invent business positioning if already specified.
 5. Do not touch secrets or environment variables unless explicitly requested.
 6. Prefer one narrow PR/change over broad refactors.
+7. For visual work, create or use a reference pack before implementation.
 
 After implementation:
 
@@ -182,6 +211,7 @@ If a Next.js app is not yet initialized, do not claim build/typecheck were run.
 - Do not add random floating cards.
 - Do not use neon/cyberpunk styling for Delaem Digital premium websites.
 - Do not use pill buttons for primary/secondary CTAs unless a design document explicitly allows it.
+- Do not copy complete layouts, logos, text, animations or proprietary illustrations from reference sources.
 - Do not add forms without consent logic.
 - Do not ship lead forms without success and failure states.
 - Do not connect production deploys without explicit approval.
@@ -213,9 +243,11 @@ Every implementation report must include:
 - files changed;
 - files intentionally not changed;
 - what changed;
+- reference pack used if visual work;
 - build result;
 - typecheck result;
 - functional evidence;
+- visual QA score if UI changed;
 - preview URL if created;
 - risks/blockers;
 - keep/discard decision;
@@ -233,6 +265,7 @@ Default Delaem Digital visual language:
 - high-ticket B2B authority;
 - no visual noise.
 
+Visual references must follow `docs/design/DD_VISUAL_REFERENCE_STACK_v1.md`.
 Motion must follow `docs/standards/DD_MOTION_STANDARD_v1.md`.
 
 ## Quality Standard
@@ -242,6 +275,7 @@ A project is not ready if:
 - the main offer is unclear;
 - CTA is weak or generic;
 - mobile version fails;
+- visual reference pack is absent for serious visual work;
 - lead flow is untested;
 - analytics are absent;
 - consent/legal minimum is absent;

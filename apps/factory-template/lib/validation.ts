@@ -12,8 +12,8 @@ export const leadFormSchema = z
     telegram: z.string().optional(),
     email: z.union([z.literal(""), z.string().email("Некорректный email")]).optional(),
     website: z.union([z.literal(""), z.string().url("Укажите корректный URL сайта")]).optional(),
-    project_type: z.string().min(1, "Выберите тип проекта"),
-    budget_range: z.string().min(1, "Выберите бюджетный диапазон"),
+    project_type: z.string().optional(),
+    budget_range: z.string().optional(),
     business_context: z.string().max(2000).optional(),
     message: z.string().max(4000).optional(),
     consent_accepted: z.literal(true, {
@@ -48,14 +48,14 @@ export type LeadFormValues = z.infer<typeof leadFormSchema>;
 
 export const projectTypeOptions = [
   { value: "site", label: "Делаем Сайт" },
-  { value: "traffic", label: "Делаем Трафик" },
+  { value: "leads", label: "Делаем Заявки" },
   { value: "system", label: "Делаем Систему" },
   { value: "audit", label: "ClientFlow Аудит" },
 ] as const;
 
 export const budgetRangeOptions = [
-  { value: "150-300", label: "150 000 – 300 000 ₽" },
-  { value: "300-600", label: "300 000 – 600 000 ₽" },
-  { value: "600+", label: "от 600 000 ₽" },
-  { value: "discuss", label: "Обсудим на разборе" },
+  { value: "150+", label: "от 150 000 ₽" },
+  { value: "250+", label: "от 250 000 ₽" },
+  { value: "350+", label: "от 350 000 ₽" },
+  { value: "discuss", label: "Обсудим после диагностики" },
 ] as const;

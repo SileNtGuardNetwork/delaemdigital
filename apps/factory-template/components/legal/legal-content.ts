@@ -15,12 +15,12 @@ export const legalPages: Record<"privacy" | "consent" | "cookies" | "terms", Leg
   privacy: {
     title: "Политика конфиденциальности",
     description: "Порядок обработки персональных данных на сайте Делаем Диджитал.",
-    updatedAt: "1 мая 2026",
+    updatedAt: "9 июня 2026",
     sections: [
       {
         title: "1. Оператор данных",
         paragraphs: [
-          "Оператор персональных данных: ИП Примеров П.П. (далее — «Оператор»). Контакт для обращений: hello@delaemdigital.ru.",
+          "Оператор персональных данных: ИП Тимошенко Виталий Викторович, ИНН 614089112640, ОГРНИП 323619600251361 (далее — «Оператор»). Контакт для обращений: delaemdigital@gmail.com; для РФ-запросов: delaemdigital@yandex.ru.",
           "Настоящий документ описывает порядок обработки персональных данных пользователей сайта.",
         ],
       },
@@ -52,7 +52,7 @@ export const legalPages: Record<"privacy" | "consent" | "cookies" | "terms", Leg
   consent: {
     title: "Согласие на обработку персональных данных",
     description: "Текст согласия для формы заявки.",
-    updatedAt: "1 мая 2026",
+    updatedAt: "9 июня 2026",
     sections: [
       {
         title: "1. Предмет согласия",
@@ -67,7 +67,7 @@ export const legalPages: Record<"privacy" | "consent" | "cookies" | "terms", Leg
       {
         title: "3. Отзыв согласия",
         paragraphs: [
-          "Согласие может быть отозвано путём направления обращения на hello@delaemdigital.ru. Отзыв не влияет на законность обработки до момента отзыва.",
+          "Согласие может быть отозвано путём направления обращения на delaemdigital@gmail.com. Отзыв не влияет на законность обработки до момента отзыва.",
         ],
       },
     ],
@@ -75,7 +75,7 @@ export const legalPages: Record<"privacy" | "consent" | "cookies" | "terms", Leg
   cookies: {
     title: "Политика использования cookie",
     description: "Информация о cookie и аналитике на сайте.",
-    updatedAt: "1 мая 2026",
+    updatedAt: "9 июня 2026",
     sections: [
       {
         title: "1. Что такое cookie",
@@ -101,7 +101,7 @@ export const legalPages: Record<"privacy" | "consent" | "cookies" | "terms", Leg
   terms: {
     title: "Условия использования сайта",
     description: "Общие условия использования материалов и сервисов сайта.",
-    updatedAt: "1 мая 2026",
+    updatedAt: "9 июня 2026",
     sections: [
       {
         title: "1. Предмет",

@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Manrope, Onest } from "next/font/google";
-
 import { AnalyticsClickListener } from "@/components/analytics/AnalyticsClickListener";
 import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import { CookieConsent } from "@/components/legal/CookieConsent";
@@ -11,18 +9,6 @@ import { env } from "@/lib/env";
 import { siteConfig } from "@/lib/site-config";
 
 import "./globals.css";
-
-const onest = Onest({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-onest",
-  display: "swap",
-});
-
-const manrope = Manrope({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-manrope",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
@@ -56,7 +42,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${onest.variable} ${manrope.variable}`}>
+    <html lang="ru">
       <body className="font-sans antialiased">
         <AnalyticsProvider>
           <AnalyticsClickListener>

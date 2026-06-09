@@ -36,7 +36,7 @@ export function SiteHeader() {
             analyticsSection="header"
             analyticsLabel="header_cta"
           >
-            Оставить заявку
+            Обсудить проект
           </PrimaryButton>
         </div>
 
@@ -75,7 +75,7 @@ export function SiteHeader() {
             ))}
             <li className="pt-2">
               <PrimaryButton href="#contact" className="w-full" onClick={() => setOpen(false)}>
-                Оставить заявку
+                Обсудить проект
               </PrimaryButton>
             </li>
           </ul>

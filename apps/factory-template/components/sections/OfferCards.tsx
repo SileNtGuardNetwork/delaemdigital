@@ -23,7 +23,12 @@ export function OfferCards() {
                 accent={card.highlighted}
                 className={cn(card.highlighted && "lg:-translate-y-1")}
               >
-                <p className="text-sm font-medium text-steel">{card.name}</p>
+                <div className="flex items-start justify-between gap-4">
+                  <p className="text-sm font-medium text-steel">{card.name}</p>
+                  <p className="shrink-0 rounded-full border border-border-accent bg-copper/10 px-3 py-1 text-xs font-semibold text-copper">
+                    {card.price}
+                  </p>
+                </div>
                 <p className="mt-3 text-sm leading-relaxed text-text-secondary">{card.description}</p>
                 <ul className="mt-6 space-y-2">
                   {card.features.map((feature) => (

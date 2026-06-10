@@ -15,13 +15,17 @@ export function AiFunnelPreview() {
           <div>
             <Eyebrow>{aiFunnel.eyebrow}</Eyebrow>
             <SectionHeading title={aiFunnel.title} subtitle={aiFunnel.subtitle} className="mb-6" />
-            <SecondaryButton href="#process" analyticsSection="ai-funnel">
-              Как подключается на практике
+            <SecondaryButton
+              href={aiFunnel.cta.href}
+              analyticsEvent="audit_bot_clicked"
+              analyticsSection="ai-funnel"
+            >
+              {aiFunnel.cta.label}
             </SecondaryButton>
           </div>
 
           <div className="surface-panel p-6 md:p-8">
-            <p className="text-xs uppercase tracking-widest text-steel">Схема v0.1 · preview</p>
+            <p className="text-xs uppercase tracking-widest text-steel">ClientFlow Audit · mini-product</p>
             <ol className="mt-6 space-y-4">
               {aiFunnel.stages.map((stage, index) => (
                 <li key={stage} className="flex items-center gap-4">
@@ -33,7 +37,7 @@ export function AiFunnelPreview() {
               ))}
             </ol>
             <p className="mt-6 text-xs text-text-muted">
-              Это объясняющая схема, а не дашборд и не имитация реальных данных.
+              Это логика мини-продукта: без имитации метрик, декоративных дашбордов и обещаний магического роста.
             </p>
           </div>
         </div>

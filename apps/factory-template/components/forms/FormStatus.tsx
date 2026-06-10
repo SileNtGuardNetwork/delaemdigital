@@ -17,10 +17,9 @@ export function FormStatus({ status, onRetry }: FormStatusProps) {
         role="status"
         aria-live="polite"
       >
-        <p className="font-display text-lg font-semibold text-success">Заявка принята</p>
+        <p className="font-display text-lg font-semibold text-success">Запрос подготовлен</p>
         <p className="mt-2 text-sm text-text-secondary">
-          Мы получили ваши данные. Менеджер свяжется с вами в рабочее время. В v0.1 отправка
-          работает в демонстрационном режиме — боевая интеграция подключается на этапе v0.2.
+          Контактные данные и контекст сохранены в интерфейсе. Боевой маршрут заявки — база, n8n, Telegram-уведомление и CRM — подключается на следующем lead-layer этапе.
         </p>
       </div>
     );
@@ -31,7 +30,7 @@ export function FormStatus({ status, onRetry }: FormStatusProps) {
       <p className="font-display text-lg font-semibold text-danger">Не удалось отправить заявку</p>
       <p className="mt-2 text-sm text-text-secondary">
         Проверьте соединение и попробуйте ещё раз. Если ошибка повторяется — напишите на
-        hello@delaemdigital.ru.
+        delaemdigital@gmail.com.
       </p>
       {onRetry ? (
         <button

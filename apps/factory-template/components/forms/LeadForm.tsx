@@ -131,6 +131,14 @@ export function LeadForm() {
       noValidate
       aria-busy={status === "loading"}
     >
+      <div className="rounded-card border border-border-subtle bg-base/35 p-4">
+        <p className="text-xs uppercase tracking-[0.18em] text-steel">Мини-бриф перед разговором</p>
+        <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+          Ответьте коротко: что нужно улучшить и как с вами связаться. Имя и телефон или
+          мессенджер обязательны; остальное можно заполнить позже после ClientFlow Аудита.
+        </p>
+      </div>
+
       <div className="grid gap-6 md:grid-cols-2">
         <FormField id="name" label="Имя *" error={errors.name}>
           <input
@@ -198,7 +206,7 @@ export function LeadForm() {
           />
         </FormField>
 
-        <FormField id="project_type" label="Что интересует *" error={errors.project_type}>
+        <FormField id="project_type" label="Что хотите обсудить" error={errors.project_type}>
           <select
             id="project_type"
             name="project_type"
@@ -207,7 +215,7 @@ export function LeadForm() {
             className={formControlClassName(Boolean(errors.project_type))}
             disabled={status === "loading"}
           >
-            <option value="">Выберите продукт</option>
+            <option value="">Не знаю, нужна диагностика</option>
             {projectTypeOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
@@ -216,7 +224,7 @@ export function LeadForm() {
           </select>
         </FormField>
 
-        <FormField id="budget_range" label="Бюджетный диапазон *" error={errors.budget_range}>
+        <FormField id="budget_range" label="Ориентир по пакету" error={errors.budget_range}>
           <select
             id="budget_range"
             name="budget_range"
@@ -225,7 +233,7 @@ export function LeadForm() {
             className={formControlClassName(Boolean(errors.budget_range))}
             disabled={status === "loading"}
           >
-            <option value="">Выберите диапазон</option>
+            <option value="">Обсудим после диагностики</option>
             {budgetRangeOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
@@ -235,7 +243,7 @@ export function LeadForm() {
         </FormField>
       </div>
 
-      <FormField id="business_context" label="Кратко о проекте" error={errors.business_context}>
+      <FormField id="business_context" label="Что сейчас есть: сайт, реклама, CRM, менеджеры" error={errors.business_context}>
         <textarea
           id="business_context"
           name="business_context"
@@ -247,7 +255,7 @@ export function LeadForm() {
         />
       </FormField>
 
-      <FormField id="message" label="Сообщение" error={errors.message}>
+      <FormField id="message" label="Где сейчас главная проблема" error={errors.message}>
         <textarea
           id="message"
           name="message"
@@ -273,12 +281,11 @@ export function LeadForm() {
         data-analytics-section="contact"
         data-analytics-label="submit_lead_form"
       >
-        {status === "loading" ? "Отправляем..." : "Отправить заявку"}
+        {status === "loading" ? "Отправляем..." : "Обсудить проект"}
       </button>
 
       <p className="text-xs text-text-muted">
-        Нажимая кнопку, вы подтверждаете согласие на обработку данных. UTM и источник фиксируются
-        при подключении v0.2.
+        Нажимая кнопку, вы подтверждаете согласие на обработку данных. Боевой маршрут заявки — база, n8n, Telegram и CRM — подключается на lead-layer этапе через защищённые env-переменные.
       </p>
     </form>
   );

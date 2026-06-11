@@ -19,7 +19,10 @@ export function FormStatus({ status, onRetry }: FormStatusProps) {
       >
         <p className="font-display text-lg font-semibold text-success">Заявка принята</p>
         <p className="mt-2 text-sm text-text-secondary">
-          Мы получили ваши данные. В текущем v1-каркасе отправка работает в демонстрационном режиме; production n8n, Telegram notification, CRM и база подключаются отдельным lead-layer шагом.
+          Мы получили ваши данные. Виталий посмотрит контекст и вернётся с первым ответом в течение рабочего дня.
+        </p>
+        <p className="mt-3 text-xs text-text-muted">
+          Если вопрос срочный — напишите напрямую в Telegram: @delaemdigital
         </p>
       </div>
     );

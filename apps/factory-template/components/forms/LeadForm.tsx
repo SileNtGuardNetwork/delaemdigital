@@ -59,11 +59,6 @@ export function LeadForm() {
     });
   };
 
-  const shouldMockFail = () => {
-    if (typeof window === "undefined") return false;
-    return new URLSearchParams(window.location.search).get("form_mock_failure") === "1";
-  };
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setErrors({});
@@ -84,13 +79,31 @@ export function LeadForm() {
 
       setStatus("loading");
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-      if (shouldMockFail()) {
-        throw new Error("mock_failure");
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.details?.fieldErrors) {
+          const fieldErrors: FieldErrors = {};
+          for (const [key, value] of Object.entries(data.details.fieldErrors)) {
+            if (Array.isArray(value) && value[0]) {
+              fieldErrors[key] = value[0] as string;
+            }
+          }
+          setErrors(fieldErrors);
+          setStatus("idle");
+          return;
+        }
+        throw new Error(data.error || "Failed to submit");
       }
 
-      void payload;
       setStatus("success");
       trackEvent("lead_form_submitted", { section: "contact" });
     } catch (error) {
@@ -111,6 +124,7 @@ export function LeadForm() {
         return;
       }
 
+      console.error("[LeadForm] Submit error:", error);
       setStatus("error");
       trackEvent("lead_form_failed", { section: "contact" });
     }
@@ -285,7 +299,7 @@ export function LeadForm() {
       </button>
 
       <p className="text-xs text-text-muted">
-        Нажимая кнопку, вы подтверждаете согласие на обработку данных. В v1 это mini-brief с mock-submit; production n8n, Telegram, CRM и база подключаются через env и v0.2 lead-layer.
+        Нажимая кнопку, вы подтверждаете согласие на обработку персональных данных.
       </p>
     </form>
   );

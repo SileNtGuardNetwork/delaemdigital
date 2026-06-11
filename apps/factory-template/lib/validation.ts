@@ -2,34 +2,35 @@ import { z } from "zod";
 
 import { CONSENT_VERSION } from "./consent";
 
-export const leadFormSchema = z
-  .object({
-    name: z
-      .string()
-      .min(2, "Укажите имя — минимум 2 символа")
-      .max(120, "Слишком длинное имя"),
-    phone: z.string().optional(),
-    telegram: z.string().optional(),
-    email: z.union([z.literal(""), z.string().email("Некорректный email")]).optional(),
-    website: z.union([z.literal(""), z.string().url("Укажите корректный URL сайта")]).optional(),
-    project_type: z.string().optional(),
-    budget_range: z.string().optional(),
-    business_context: z.string().max(2000).optional(),
-    message: z.string().max(4000).optional(),
-    consent_accepted: z.literal(true, {
-      errorMap: () => ({
-        message: "Необходимо согласие на обработку персональных данных",
-      }),
-    }),
-    consent_version: z.string().default(CONSENT_VERSION),
-    source: z.string().optional(),
-    utm_source: z.string().optional(),
-    utm_medium: z.string().optional(),
-    utm_campaign: z.string().optional(),
-    utm_content: z.string().optional(),
-    utm_term: z.string().optional(),
-    referrer: z.string().optional(),
-    page_path: z.string().optional(),
+export const leadFormBaseSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Укажите имя — минимум 2 символа")
+    .max(120, "Слишком длинное имя"),
+  phone: z.string().optional(),
+  telegram: z.string().optional(),
+  email: z.union([z.literal(""), z.string().email("Некорректный email")]).optional(),
+  website: z.union([z.literal(""), z.string().url("Укажите корректный URL сайта")]).optional(),
+  project_type: z.string().optional(),
+  budget_range: z.string().optional(),
+  business_context: z.string().max(2000).optional(),
+  message: z.string().max(4000).optional(),
+  consent_accepted: z.boolean(),
+  consent_version: z.string().default(CONSENT_VERSION),
+  source: z.string().optional(),
+  utm_source: z.string().optional(),
+  utm_medium: z.string().optional(),
+  utm_campaign: z.string().optional(),
+  utm_content: z.string().optional(),
+  utm_term: z.string().optional(),
+  referrer: z.string().optional(),
+  page_path: z.string().optional(),
+});
+
+export const leadFormSchema = leadFormBaseSchema
+  .refine((data) => data.consent_accepted === true, {
+    message: "Необходимо согласие на обработку персональных данных",
+    path: ["consent_accepted"],
   })
   .superRefine((data, ctx) => {
     const phone = data.phone?.trim() ?? "";
